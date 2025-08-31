@@ -1,0 +1,25 @@
+/* @theme am_navy_sans */
+
+@import 'am_template';
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+:root {
+  --font-family-main: 'Helvetica Neue', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+:root {
+  --color-code-bg: #f3f6fa; 
+  --color-coverbg: #002d62;
+  --color-few: #91a814;
+  --color-footer: #8c8c8c;
+  --color-main: #001833;
+  --color-much: #005f9e;
+  --color-navbar-bg: #cfe0ef;
+  --color-navbar-font: rgb(108, 95, 91);
+  --color-quote: rgba(254, 176, 98, 0.1);
+  --color-title: rgb(255, 255, 255);
+  --color-trans: #3d75b6;
+  --filter-b: brightness(30%) contrast(70%) grayscale(100%);
+  --filter-c: brightness(0%) contrast(60%) grayscale(80%);
+  --filter-e: brightness(0%) contrast(70%) grayscale(100%);
+}

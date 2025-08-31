@@ -6,7 +6,6 @@ math: mathjax
 paginate: true
 headingDivider: [2,3]
 footer: \ *Chaebeom Sheen* *Neural Circuits in the Olfactory Bulb* *February 7th, 2025*
-
 ---
 
 <!-- _class: cover_e -->

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NABI Presentations</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        .presentations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .presentation-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+        .presentation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .presentation-card h3 {
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        .presentation-card p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .presentation-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #5a6fd8;
+            transform: scale(1.05);
+        }
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            color: white;
+            opacity: 0.8;
+        }
+        .loading {
+            text-align: center;
+            color: white;
+            font-size: 1.2rem;
+            margin: 40px 0;
+        }
+        .error {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            color: white;
+            text-align: center;
+        }
+        .refresh-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        .refresh-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>NABI Presentations</h1>
+            <p>Collection of research presentations and academic materials</p>
+        </div>
+        
+        <div id="presentations-container">
+            <div class="loading">Discovering presentations...</div>
+        </div>
+        
+        <div class="footer">
+            <p>&copy; 2025 NABI Research Group. All rights reserved.</p>
+        </div>
+    </div>
+
+    <script>
+        class PresentationDiscovery {
+            constructor() {
+                this.container = document.getElementById('presentations-container');
+                this.presentations = [];
+                this.init();
+            }
+
+            async init() {
+                try {
+                    await this.discoverPresentations();
+                    this.renderPresentations();
+                } catch (error) {
+                    this.showError('Failed to discover presentations: ' + error.message);
+                }
+            }
+
+            async discoverPresentations() {
+                // Try to fetch from GitHub API first
+                try {
+                    await this.fetchFromGitHub();
+                } catch (error) {
+                    console.log('GitHub API failed, trying local discovery:', error);
+                    await this.discoverLocalPresentations();
+                }
+            }
+
+            async fetchFromGitHub() {
+                const repoOwner = 'NABI-SNU';
+                const repoName = 'presentations';
+                const branch = 'main';
+                
+                const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/git/trees/${branch}?recursive=1`);
+                
+                if (!response.ok) {
+                    throw new Error(`GitHub API error: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                const tree = data.tree || [];
+                
+                // Group files by directory
+                const directories = {};
+                tree.forEach(item => {
+                    if (item.type === 'blob' && item.path.includes('/')) {
+                        const dir = item.path.split('/')[0];
+                        if (!directories[dir]) {
+                            directories[dir] = [];
+                        }
+                        directories[dir].push(item);
+                    }
+                });
+
+                // Find presentation directories
+                for (const [dir, files] of Object.entries(directories)) {
+                    const hasHtml = files.some(f => f.path.endsWith('.html'));
+                    const hasPdf = files.some(f => f.path.endsWith('.pdf'));
+                    const hasMd = files.some(f => f.path.endsWith('.md'));
+                    
+                    if (hasHtml || hasPdf || hasMd) {
+                        const presentation = {
+                            name: this.formatDirectoryName(dir),
+                            directory: dir,
+                            htmlFile: files.find(f => f.path.endsWith('.html'))?.path,
+                            pdfFile: files.find(f => f.path.endsWith('.pdf'))?.path,
+                            mdFile: files.find(f => f.path.endsWith('.md'))?.path,
+                            description: this.generateDescription(dir)
+                        };
+                        this.presentations.push(presentation);
+                    }
+                }
+            }
+
+            async discoverLocalPresentations() {
+                // Fallback: try to discover from current page structure
+                // This will work when the page is served from GitHub Pages
+                const currentPath = window.location.pathname;
+                const basePath = currentPath.replace('/index.html', '').replace('/', '');
+                
+                // For now, we'll use a predefined list as fallback
+                // In a real implementation, you might want to make an AJAX call to discover files
+                this.presentations = [
+                    {
+                        name: "Understanding The Geometry of Abstraction in the Hippocampus",
+                        directory: "20250906_8B_S.Bernandi",
+                        htmlFile: "20250906_8B_S.Bernandi/presentation.html",
+                        pdfFile: "20250906_8B_S.Bernandi/presentation.pdf",
+                        description: "Presentation by S. Bernandi on the geometric properties of abstraction in hippocampal neural representations."
+                    },
+                    {
+                        name: "CBS JA Zavatone-Veth Presentation",
+                        directory: "20250330_CBS_JA.Zavatone-Veth",
+                        htmlFile: "20250330_CBS_JA.Zavatone-Veth/presentation.html",
+                        pdfFile: "20250330_CBS_JA.Zavatone-Veth/presentation.pdf",
+                        description: "Presentation materials from the CBS JA session with Zavatone-Veth."
+                    }
+                ];
+            }
+
+            formatDirectoryName(dir) {
+                // Convert directory names to readable titles
+                return dir
+                    .replace(/_/g, ' ')
+                    .replace(/\b\w/g, l => l.toUpperCase())
+                    .replace(/\d{8}/g, '') // Remove date prefixes
+                    .trim();
+            }
+
+            generateDescription(dir) {
+                // Generate descriptions based on directory names
+                const descriptions = {
+                    '20250906_8B_S.Bernandi': 'Presentation by S. Bernandi on the geometric properties of abstraction in hippocampal neural representations.',
+                    '20250330_CBS_JA.Zavatone-Veth': 'Presentation materials from the CBS JA session with Zavatone-Veth.',
+                };
+                
+                return descriptions[dir] || `Presentation materials from ${this.formatDirectoryName(dir)}.`;
+            }
+
+            renderPresentations() {
+                if (this.presentations.length === 0) {
+                    this.showError('No presentations found. Please check your repository structure.');
+                    return;
+                }
+
+                const grid = document.createElement('div');
+                grid.className = 'presentations-grid';
+
+                this.presentations.forEach(presentation => {
+                    const card = this.createPresentationCard(presentation);
+                    grid.appendChild(card);
+                });
+
+                this.container.innerHTML = '';
+                this.container.appendChild(grid);
+            }
+
+            createPresentationCard(presentation) {
+                const card = document.createElement('div');
+                card.className = 'presentation-card';
+
+                const title = document.createElement('h3');
+                title.textContent = presentation.name;
+
+                const description = document.createElement('p');
+                description.textContent = presentation.description;
+
+                const links = document.createElement('div');
+                links.className = 'presentation-links';
+
+                if (presentation.htmlFile) {
+                    const htmlLink = document.createElement('a');
+                    htmlLink.href = presentation.htmlFile;
+                    htmlLink.className = 'btn btn-primary';
+                    htmlLink.textContent = 'View Presentation';
+                    links.appendChild(htmlLink);
+                }
+
+                if (presentation.pdfFile) {
+                    const pdfLink = document.createElement('a');
+                    pdfLink.href = presentation.pdfFile;
+                    pdfLink.className = 'btn btn-secondary';
+                    pdfLink.textContent = 'Download PDF';
+                    links.appendChild(pdfLink);
+                }
+
+                card.appendChild(title);
+                card.appendChild(description);
+                card.appendChild(links);
+
+                return card;
+            }
+
+            showError(message) {
+                this.container.innerHTML = `
+                    <div class="error">
+                        <p>${message}</p>
+                        <button class="refresh-btn" onclick="location.reload()">Refresh Page</button>
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new PresentationDiscovery();
+        });
+    </script>
+</body>
+</html>

@@ -109,7 +109,7 @@ $$
 <!-- transition: cover -->
 <!-- _header: \ ***@ SNU CN*** *Introduction* **In Silico** *In Vivo* *Individuals* *Conclusion*-->
 
-- Learning on 8 MNIST digits with a FFN, we find that ANNs have high dimensionality (e.g. decoding accuracy). Parity and magnitude are orthogonal and have the most accurate abstract representations (measured by CCGP and PS), when it is the given  task. They are orthogonal in neural representations. 
+- Learning on 8 MNIST digits with a FFN, we find that ANNs have high dimensionality (e.g. decoding accuracy). Parity and magnitude are orthogonal and have abstract representations (measured by CCGP and PS), when it is the given task.
 
 ![#c h:350](./assets/mnist.png)
 
@@ -246,7 +246,7 @@ def compute_ps(X: vector_rep, y_cond: image_label, var_map: dict):
 <!-- _header: \ ***@ SNU CN*** *Introduction* *In Silico* **In Vivo** *Individuals* *Conclusion*-->
 
 1. Which variables are represented in each area of the brain?
-2. Which variables are represented in **abstract format**, as quantified by CGCGP?
+2. Which variables are represented in **abstract format**, as quantified by CCGP?
 3. Does our brain use a *perfectly facotrized representation* or does it use a *twisted square* representation?
 
 ![#c h:350](./assets/factorvtwisted.png)
@@ -258,7 +258,7 @@ def compute_ps(X: vector_rep, y_cond: image_label, var_map: dict):
 <!-- _header: \ ***@ SNU CN*** *Introduction* *In Silico* **In Vivo** *Individuals* *Conclusion*-->
 
 1. Which variables are represented in each area of the brain?
-2. Which variables are represented in **abstract format**, as quantified by CGCGP?
+2. Which variables are represented in **abstract format**, as quantified by CCGP?
 3. Does our brain use a *perfectly facotrized representation* or does it use a *twisted square* representation?
 4. Do different areas of our brain represent different values at different speeds?
 5. Does CCGP accurately correlate with accuracy, i.e. is there an abstract context representation in the brain?
@@ -293,7 +293,7 @@ def compute_ps(X: vector_rep, y_cond: image_label, var_map: dict):
 <!-- transition: cover -->
 <!-- _header: \ ***@ SNU CN*** *Introduction* *In Silico* **In Vivo** *Individuals* *Conclusion*-->
 
-2. Which variables are represented in **abstract format**, as quantified by CGCGP?
+2. Which variables are represented in **abstract format**, as quantified by CCGP?
    - In the first epoch, *action* is represented weakly in the HPC as an abstract format (shown in both CCGP and PS), perhaps indicating a weaker part in the decision making process.
 
 ![#c h:300](./assets/first_epoch_ccgp&ps.png)
@@ -304,7 +304,7 @@ def compute_ps(X: vector_rep, y_cond: image_label, var_map: dict):
 <!-- transition: cover -->
 <!-- _header: \ ***@ SNU CN*** *Introduction* *In Silico* **In Vivo** *Individuals* *Conclusion*-->
 
-2. Which variables are represented in **abstract format**, as quantified by CGCGP?
+2. Which variables are represented in **abstract format**, as quantified by CCGP?
    - In the first epoch, *action* is represented weakly in the HPC as an abstract format (shown in both CCGP and PS), perhaps indicating a weaker part in the decision making process.
 
 ![#c h:300](./assets/first_epoch_geometry.png)
@@ -315,7 +315,7 @@ def compute_ps(X: vector_rep, y_cond: image_label, var_map: dict):
 <!-- transition: cover -->
 <!-- _header: \ ***@ SNU CN*** *Introduction* *In Silico* **In Vivo** *Individuals* *Conclusion*-->
 
-2. Which variables are represented in **abstract format**, as quantified by CGCGP?
+2. Which variables are represented in **abstract format**, as quantified by CCGP?
    - In the first epoch, *action* is represented weakly in the HPC as an abstract format (shown in both CCGP and PS), perhaps indicating a weaker part in the decision making process.
    - In the second epoch, *context* is more persistent in the HPC compared to the DLPFC, which may be related to hippocampus's role in memory formation.
 
@@ -327,7 +327,7 @@ def compute_ps(X: vector_rep, y_cond: image_label, var_map: dict):
 <!-- transition: cover -->
 <!-- _header: \ ***@ SNU CN*** *Introduction* *In Silico* **In Vivo** *Individuals* *Conclusion*-->
 
-2. Which variables are represented in **abstract format**, as quantified by CGCGP?
+2. Which variables are represented in **abstract format**, as quantified by CCGP?
    - In the first epoch, *action* is represented weakly in the HPC as an abstract format (shown in both CCGP and PS), perhaps indicating a weaker part in the decision making process.
    - In the second epoch, *context* is more persistent in the HPC compared to the DLPFC, which may be related to hippocampus's role in memory formation.
 
